@@ -1,0 +1,21 @@
+{
+  "version": "zap-score-v1",
+  "purpose": "Direct points forecasting; never derive a score from a win probability",
+  "historical_information_cutoff": "Before midnight America/New_York on each game date; apply all same-date results only afterward",
+  "train_seasons": [2023, 2024],
+  "validation_season": 2025,
+  "evaluation_season": 2026,
+  "evaluation_disclosure": "2025-26 was previously inspected for winner-model evaluation and sign audits. Score results on it are exploratory chronological evaluation, not a new untouched holdout.",
+  "window_games": 20,
+  "league_prior_games": 5,
+  "ridge_grid": [1, 10, 100],
+  "selection_metric": "2024-25 mean absolute error across both team scores",
+  "features": ["intercept", "own prior offense relative to league times expected pace/100", "opponent prior defense relative to league times expected pace/100", "expected pace minus 100", "home advantage: +0.5 home, -0.5 away, 0 neutral", "prior rest difference clipped to seven days /7", "own expected missing production /10", "opponent expected missing production /10"],
+  "bounds": "Own missing-production coefficient <=0; opponent coefficient >=0; other coefficients unconstrained",
+  "baseline": "Unfitted rolling expected pace times mean of own smoothed offensive efficiency and opponent smoothed defensive efficiency /100",
+  "pace_proxy": "Average of both box-score possession estimates FGA +0.44 FTA - OREB + TO, normalized to 48 minutes using recorded played minutes with a 48-minute minimum. Estimated possessions, not official tracking pace.",
+  "outputs": "Separate direct team score predictions; nonnegative, round half up to integer for display and save those exact integers before cutoff",
+  "availability": "Same rolling participation-production proxy as frozen winner model. Live official overrides are an unvalidated extension. No designation-specific probabilities invented.",
+  "overtime": "Train/evaluate against final scores including overtime. Pace inputs normalized to regulation; no explicit overtime occurrence model.",
+  "future_validation": "A later uninspected season is required before any new untouched-validation claim"
+}

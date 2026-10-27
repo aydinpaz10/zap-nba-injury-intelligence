@@ -1,0 +1,35 @@
+{
+  "notice": "Fictional coefficients created solely for demonstration; not fitted and not from production.",
+  "win": {
+    "baseline": {
+      "coefficients": [
+        0.2,
+        1.0,
+        0.3,
+        0.1,
+        0.2
+      ]
+    },
+    "adjusted": {
+      "coefficients": [
+        0.2,
+        1.0,
+        0.3,
+        0.1,
+        0.2,
+        0.4
+      ]
+    }
+  },
+  "score_model": "synthetic-demo",
+  "score_coefficients": [
+    110,
+    0.8,
+    0.7,
+    1.5,
+    2,
+    3,
+    -5,
+    0
+  ]
+}

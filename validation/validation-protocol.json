@@ -1,0 +1,22 @@
+{
+ "version":"zap-pregame-v1",
+ "fixed_before_test_evaluation":true,
+ "scope":"NBA regular-season completed games only; ESPN team schedules and box scores",
+ "train_seasons":[2023,2024],
+ "validation_season":2025,
+ "untouched_test_season":2026,
+ "season_year_semantics":"NBA season ending year; 2026 is 2025-26, the latest complete season as of 2026-10-21",
+ "baseline_features":["home_court","pregame_elo_difference/400","prior_10_game_margin_difference/10","rest_difference_clipped_7_days/7","back_to_back_difference"],
+ "adjusted_extra_feature":"expected missing rolling box-score production: away loss minus home loss",
+ "rating":"Hollinger Game Score per 36 minutes from last 30 prior appearances, empirical league-mean shrinkage of 200 minutes, withheld below 100 observed minutes; clearly a production proxy, not causal adjusted plus/minus",
+ "replacement":"prior-only 25th percentile of eligible player production per 36; projected missing minutes redistributed to observed teammates subject to 48-minute capacity; unknown rating remains unknown",
+ "historical_availability":"derive participation/DNP/inactive/missing from box scores; use only prior-game participation to estimate next-game absence risk. Current-game DNPs are postgame outcomes and NEVER pregame features. No claim of confirmed historical injury labels.",
+ "lagged_absence_probability":"Beta(1,1) smoothed observed previous-zero-minute to next-zero-minute transition using games before prediction date; game-specific official statuses unavailable in historical training",
+ "chronology":"All features computed before processing any results on the same America/New_York calendar date. Rolling ratings, team membership, minutes and replacement levels use past records only. Full-season stats and present-day rosters prohibited in historical features.",
+ "elo":"1500 initialization, K=20, 0.75 season carryover toward 1500; fixed before evaluation",
+ "selection":"L2 logistic regression; C grid [0.1,1,10]. Select lowest validation log loss separately per model, refit on 2023-2025, evaluate once on 2026. Adjusted missing-production coefficient constrained nonnegative for monotonic response to lost production. No probability post-calibration fit on test.",
+ "metrics":["accuracy threshold 0.5","natural-log log loss","binary Brier score","10 fixed equal-width calibration bins","expected calibration error"],
+ "live_unknown_statuses":"Show full/absent scenarios and empirical lagged participation probability. No invented Questionable/Probable conversion percentages. Official Out=0 participation; Available=1. Uncertain labels use observed lagged base rate with explicit uncalibrated-status warning.",
+ "test_reporting":"Report both models even if adjusted loses; metrics concern lagged availability proxy, not a backtest of official injury adjustments. Live official overrides are a domain shift and unvalidated separately.",
+ "data_failure":"retain cached normalized records and source hashes; disclose coverage, omit invalid game labels, never synthesize scores or player stats"
+}
